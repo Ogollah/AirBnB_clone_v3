@@ -23,6 +23,15 @@ def status():
 
 @app_views.route('/stats', strict_slashes=False)
 def stats():
-    classes = [Amenity, City, Place, Review, State, User]
-    json_dict = {cls.__name__.lower() + 's': storage.count(cls) for cls in classes}
-    return jsonify(json_dict)
+    """
+    Count storage objects.
+    """
+    classes = {"amenities": Amenity, "cities": City,
+               "places": Place, "reviews": Review,
+               "states": State, "users": User}
+    json_stats = {}
+
+    for name, cls in classes.items():
+        json_stats.update({name: storage.count(cls)})
+
+    return jsonify(json_stats)
